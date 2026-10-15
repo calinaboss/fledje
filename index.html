@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fledje gheorghe rohan</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: normal;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .photos {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .photos img {
+            width: 50%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        /* Stili per la sezione Petizione */
+        .petition-container {
+           
+            padding: 16px;
+            margin: 20px 0 25px 0;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .petition-count {
+            font-size: 14px;
+            color: #ff4d4d;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .petition-btn {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 12px 0;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .petition-btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .petition-btn.signed {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            border: 1px solid #ffffff;
+            padding: 12px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .links a:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+ 
+        <h1>rohans bubu bear</h1>
+
+        <div class="photos">
+            <img src="fledje.jpg" alt="Foto 1" onerror="this.src='https://placehold.co/200x200/333/fff?text=Foto+1'">
+            <img src="fledje2.png" alt="Foto 2" onerror="this.src='https://placehold.co/200x200/333/fff?text=Foto+2'">
+        </div>
+
+        <p class="promo-text">ONLYFANS promo free monthly subscription</p>
+        <p class="promo-text">COLLAB WITH TOM PEARL!!!!</p>
+
+       
+        <div class="petition-container">
+            <p class="petition-count" id="petitionCounter">
+                <i class="fa-solid fa-fire"></i> +30 thousand people signed for his new haircut
+            </p>
+            <button class="petition-btn" id="petitionBtn" onclick="signPetition()">
+                <i class="fa-solid fa-scissors"></i> Sign Petition: Fledje New Haircut
+            </button>
+        </div>
+
+        <div class="links">
+            <a href="https://discord.gg/qFztNJx7ed" target="_blank" rel="noopener">
+                <i class="fa-brands fa-discord"></i> JOIN Discord
+            </a>
+            <a href="https://www.tiktok.com/@twitch.fledje" target="_blank" rel="noopener">
+                <i class="fa-brands fa-tiktok"></i> TikTok
+            </a>
+            <a href="https://www.twitch.tv/fledje" target="_blank" rel="noopener">
+                <i class="fa-brands fa-twitch"></i> Twitch
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let signed = false;
+
+        function signPetition() {
+            const btn = document.getElementById('petitionBtn');
+            const counter = document.getElementById('petitionCounter');
+
+            if (!signed) {
+                counter.innerHTML = `<i class="fa-solid fa-fire"></i> +30.001 people signed for his new haircut`;
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Petition Signed!`;
+                btn.classList.add('signed');
+                signed = true;
+            } else {
+                alert("Hai già firmato la petizione!");
+            }
+        }
+    </script>
+
+</body>
+</html>
