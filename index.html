@@ -1,16 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>fledje gheorghe rohan</title>
-
+    <link rel="icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -21,20 +26,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 30px 16px;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 450px;
             width: 100%;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: clamp(25px, 6vw, 32px);
             font-weight: normal;
             margin-bottom: 25px;
             letter-spacing: 1px;
+            overflow-wrap: anywhere;
         }
 
         .photos {
@@ -46,42 +55,110 @@
 
         .photos img {
             width: 50%;
-            height: 200px;
+            height: clamp(140px, 42vw, 200px);
             object-fit: cover;
             display: block;
+            min-width: 0;
         }
 
         .promo-text {
             font-size: 16px;
-            margin-bottom: 15px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            color: #ffffff;
+            overflow-wrap: anywhere;
+        }
+
+        .videos {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin: 24px 0;
+        }
+
+        .video-card {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .video-title {
+            font-size: 14px;
+            margin-bottom: 9px;
             color: #ffffff;
         }
 
-        /* Stili per la sezione Petizione */
+        .video-player {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: transparent;
+            border: none;
+            outline: none;
+            object-fit: contain;
+        }
+
+        .video-player.portrait {
+            aspect-ratio: 9 / 16;
+            max-height: 520px;
+            width: auto;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .video-hint {
+            font-size: 12px;
+            color: #aaaaaa;
+            margin-top: 7px;
+        }
+
         .petition-container {
-           
-            padding: 16px;
+            padding: 25px 18px;
             margin: 20px 0 25px 0;
-            background-color: rgba(255, 255, 255, 0.03);
+            background-color: rgba(255, 255, 255, 0.04);
         }
 
         .petition-count {
-            font-size: 14px;
-            color: #ff4d4d;
-            font-weight: bold;
-            margin-bottom: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            letter-spacing: 0.5px;
+            gap: 5px;
+            color: #ff4d4d;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        .petition-count .fire-icon {
+            font-size: 25px;
+            margin-bottom: 2px;
+        }
+
+        .petition-number {
+            font-size: clamp(42px, 11vw, 58px);
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            color: #ff4d4d;
+            text-shadow: 0 0 18px rgba(255, 77, 77, 0.2);
+            overflow-wrap: anywhere;
+        }
+
+        .petition-label {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #ffffff;
+            font-weight: normal;
+            letter-spacing: 0.2px;
         }
 
         .petition-btn {
             background: transparent;
             color: #ffffff;
             border: 1px solid #ffffff;
-            padding: 12px 0;
+            padding: 15px 12px;
             width: 100%;
             font-size: 16px;
             cursor: pointer;
@@ -91,6 +168,7 @@
             gap: 10px;
             transition: all 0.2s ease;
             font-family: inherit;
+            min-height: 50px;
         }
 
         .petition-btn:hover {
@@ -116,8 +194,9 @@
             text-decoration: none;
             font-size: 16px;
             border: 1px solid #ffffff;
-            padding: 12px 0;
+            padding: 13px 12px;
             width: 100%;
+            min-height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -129,26 +208,226 @@
             background-color: #ffffff;
             color: #000000;
         }
+
+        .orbit-field {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orbit-item {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            opacity: 0.95;
+            animation: orbit-spin linear infinite;
+            will-change: transform;
+        }
+
+        .orbit-item:nth-child(1) {
+            top: 5%;
+            left: 8%;
+            animation-duration: 12s;
+        }
+
+        .orbit-item:nth-child(2) {
+            top: 13%;
+            right: 10%;
+            animation-duration: 16s;
+            animation-delay: -4s;
+        }
+
+        .orbit-item:nth-child(3) {
+            top: 32%;
+            left: 3%;
+            width: 80px;
+            height: 80px;
+            animation-duration: 10s;
+            animation-delay: -2s;
+        }
+
+        .orbit-item:nth-child(4) {
+            top: 39%;
+            right: 5%;
+            animation-duration: 14s;
+            animation-delay: -8s;
+        }
+
+        .orbit-item:nth-child(5) {
+            bottom: 30%;
+            left: 7%;
+            width: 85px;
+            height: 85px;
+            animation-duration: 11s;
+            animation-delay: -5s;
+        }
+
+        .orbit-item:nth-child(6) {
+            bottom: 25%;
+            right: 8%;
+            animation-duration: 15s;
+            animation-delay: -3s;
+        }
+
+        .orbit-item:nth-child(7) {
+            bottom: 8%;
+            left: 17%;
+            width: 75px;
+            height: 75px;
+            animation-duration: 13s;
+            animation-delay: -9s;
+        }
+
+        .orbit-item:nth-child(8) {
+            bottom: 7%;
+            right: 16%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 17s;
+            animation-delay: -6s;
+        }
+
+        @keyframes orbit-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                align-items: flex-start;
+                padding: 28px 14px;
+            }
+
+            .container {
+                max-width: 450px;
+            }
+
+            h1 {
+                margin-bottom: 20px;
+            }
+
+            .photos {
+                gap: 8px;
+            }
+
+            .photos img {
+                height: clamp(125px, 43vw, 190px);
+            }
+
+            .promo-text {
+                font-size: 14px;
+            }
+
+            .petition-container {
+                padding: 22px 13px;
+            }
+
+            .petition-count {
+                margin-bottom: 18px;
+            }
+
+            .petition-number {
+                font-size: clamp(40px, 12vw, 54px);
+            }
+
+            .petition-label {
+                font-size: 13px;
+            }
+
+            .petition-btn,
+            .links a {
+                font-size: 14px;
+                padding: 12px 8px;
+            }
+
+            .orbit-item {
+                width: 65px;
+                height: 65px;
+                opacity: 0.9;
+            }
+
+            .orbit-item:nth-child(3),
+            .orbit-item:nth-child(5),
+            .orbit-item:nth-child(7) {
+                width: 55px;
+                height: 55px;
+            }
+
+            .orbit-item:nth-child(8) {
+                width: 70px;
+                height: 70px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .orbit-item {
+                animation-duration: 60s;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <div class="orbit-field" aria-hidden="true">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+        <img class="orbit-item" src="immaginegira.png" alt="">
+    </div>
+
     <div class="container">
- 
+
         <h1>rohans bubu bear</h1>
 
         <div class="photos">
-            <img src="fledje.jpg" alt="Foto 1" onerror="this.src='https://placehold.co/200x200/333/fff?text=Foto+1'">
-            <img src="fledje2.png" alt="Foto 2" onerror="this.src='https://placehold.co/200x200/333/fff?text=Foto+2'">
+            <img src="fledje.jpg" alt="Foto 1" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Foto+1'">
+            <img src="fledje2.png" alt="Foto 2" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Foto+2'">
         </div>
 
         <p class="promo-text">ONLYFANS promo free monthly subscription</p>
         <p class="promo-text">COLLAB WITH TOM PEARL!!!!</p>
 
-       
+        <div class="videos">
+            <div class="video-card">
+
+                <video class="video-player" controls playsinline preload="metadata">
+                    <source src="fledje.mp4" type="video/mp4">
+                    Il tuo browser non supporta la riproduzione video.
+                </video>
+
+            </div>
+
+            <div class="video-card">
+
+                <video class="video-player" controls playsinline preload="metadata">
+                    <source src="fledje2.mp4" type="video/mp4">
+                    Il tuo browser non supporta la riproduzione video.
+                </video>
+
+            </div>
+        </div>
+
         <div class="petition-container">
             <p class="petition-count" id="petitionCounter">
-                <i class="fa-solid fa-fire"></i> +30.020 thousand people signed for his new haircut
+                <i class="fa-solid fa-fire fire-icon"></i>
+                <span class="petition-number" id="petitionNumber">30.020</span>
+                <span class="petition-label">people signed for his new haircut</span>
             </p>
             <button class="petition-btn" id="petitionBtn" onclick="signPetition()">
                 <i class="fa-solid fa-scissors"></i> Sign Petition: Fledje New Haircut
@@ -166,6 +445,7 @@
                 <i class="fa-brands fa-twitch"></i> Twitch
             </a>
         </div>
+
     </div>
 
     <script>
@@ -173,17 +453,27 @@
 
         function signPetition() {
             const btn = document.getElementById('petitionBtn');
-            const counter = document.getElementById('petitionCounter');
+            const counter = document.getElementById('petitionNumber');
 
             if (!signed) {
-                counter.innerHTML = `<i class="fa-solid fa-fire"></i> +30.021 people signed for his new haircut`;
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Petition Signed!`;
+                counter.textContent = '30.021';
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Petition Signed!';
                 btn.classList.add('signed');
                 signed = true;
             } else {
                 alert("Hai già firmato la petizione!");
             }
         }
+
+        document.querySelectorAll('.video-player').forEach(video => {
+            video.addEventListener('play', () => {
+                document.querySelectorAll('.video-player').forEach(otherVideo => {
+                    if (otherVideo !== video) {
+                        otherVideo.pause();
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
