@@ -126,7 +126,7 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
-            color: #ff4d4d;
+            color: #fcfcfc;
             margin-bottom: 22px;
             line-height: 1.4;
         }
@@ -141,8 +141,8 @@
             line-height: 1.1;
             font-weight: 900;
             letter-spacing: -1.5px;
-            color: #ff4d4d;
-            text-shadow: 0 0 18px rgba(255, 77, 77, 0.2);
+            color: #fcfcfc;
+            text-shadow: 0 0 18px rgba(253, 253, 253, 0.2);
             overflow-wrap: anywhere;
         }
 
@@ -426,7 +426,7 @@
         <div class="petition-container">
             <p class="petition-count" id="petitionCounter">
                 
-                <span class="petition-number" id="petitionNumber">31</span>
+                <span class="petition-number" id="petitionNumber">35</span>
                 <span class="petition-label">people signed for his new haircut</span>
             </p>
             <button class="petition-btn" id="petitionBtn" onclick="signPetition()">
@@ -456,7 +456,7 @@
             const counter = document.getElementById('petitionNumber');
 
             if (!signed) {
-                counter.textContent = '32';
+                counter.textContent = '36';
                 btn.innerHTML = '<i class="fa-solid fa-check"></i> Petition Signed!';
                 btn.classList.add('signed');
                 signed = true;
