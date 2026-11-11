@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>fledje gheorghe rohan</title>
-    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="icon" href="face.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
@@ -31,7 +30,7 @@
         }
 
         .container {
-            max-width: 450px;
+            max-width: 480px;
             width: 100%;
             text-align: center;
             position: relative;
@@ -41,9 +40,35 @@
         h1 {
             font-size: clamp(25px, 6vw, 32px);
             font-weight: normal;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             letter-spacing: 1px;
             overflow-wrap: anywhere;
+        }
+
+        /* Top Game Banner */
+        .game-featured-banner {
+            display: block;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(255, 75, 43, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-featured-banner:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 35px rgba(255, 75, 43, 0.8);
         }
 
         .photos {
@@ -59,6 +84,7 @@
             object-fit: cover;
             display: block;
             min-width: 0;
+            border-radius: 8px;
         }
 
         .promo-text {
@@ -84,12 +110,6 @@
             box-shadow: none;
         }
 
-        .video-title {
-            font-size: 14px;
-            margin-bottom: 9px;
-            color: #ffffff;
-        }
-
         .video-player {
             display: block;
             width: 100%;
@@ -98,306 +118,181 @@
             border: none;
             outline: none;
             object-fit: contain;
-        }
-
-        .video-player.portrait {
-            aspect-ratio: 9 / 16;
-            max-height: 520px;
-            width: auto;
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .video-hint {
-            font-size: 12px;
-            color: #aaaaaa;
-            margin-top: 7px;
+            border-radius: 8px;
         }
 
         .petition-container {
-            padding: 25px 18px;
-            margin: 20px 0 25px 0;
-            background-color: rgba(255, 255, 255, 0.04);
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .petition-count {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            color: #fcfcfc;
-            margin-bottom: 22px;
-            line-height: 1.4;
-        }
-
-        .petition-count .fire-icon {
-            font-size: 25px;
-            margin-bottom: 2px;
+            font-size: 18px;
+            margin-bottom: 15px;
         }
 
         .petition-number {
-            font-size: clamp(42px, 11vw, 58px);
-            line-height: 1.1;
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            color: #fcfcfc;
-            text-shadow: 0 0 18px rgba(253, 253, 253, 0.2);
-            overflow-wrap: anywhere;
-        }
-
-        .petition-label {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #ffffff;
-            font-weight: normal;
-            letter-spacing: 0.2px;
+            font-weight: bold;
+            font-size: 26px;
+            color: #ffd700;
         }
 
         .petition-btn {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid #ffffff;
-            padding: 15px 12px;
-            width: 100%;
-            font-size: 16px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
-            display: flex;
+            transition: all 0.2s;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            min-height: 50px;
+            gap: 8px;
         }
 
         .petition-btn:hover {
-            background-color: #ffffff;
-            color: #000000;
-        }
-
-        .petition-btn.signed {
-            background-color: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
+            background: #e0e0e0;
         }
 
         .links {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            align-items: center;
+            margin-top: 25px;
         }
 
         .links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 16px;
-            border: 1px solid #ffffff;
-            padding: 13px 12px;
-            width: 100%;
-            min-height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.2s ease;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.2s, transform 0.15s;
         }
 
         .links a:hover {
-            background-color: #ffffff;
-            color: #000000;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
-        .orbit-field {
+        /* Modal Popup */
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(5px);
         }
 
-        .orbit-item {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            opacity: 0.95;
-            animation: orbit-spin linear infinite;
-            will-change: transform;
+        .modal-overlay.hidden {
+            display: none !important;
         }
 
-        .orbit-item:nth-child(1) {
-            top: 5%;
-            left: 8%;
-            animation-duration: 12s;
+        .modal-box {
+            background: #161922;
+            border: 2px solid #ff4b2b;
+            box-shadow: 0 10px 40px rgba(255, 75, 43, 0.4);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 400px;
+            padding: 28px 24px;
+            text-align: center;
+            animation: popIn 0.3s ease-out;
         }
 
-        .orbit-item:nth-child(2) {
-            top: 13%;
-            right: 10%;
-            animation-duration: 16s;
-            animation-delay: -4s;
+        @keyframes popIn {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        .orbit-item:nth-child(3) {
-            top: 32%;
-            left: 3%;
-            width: 80px;
-            height: 80px;
-            animation-duration: 10s;
-            animation-delay: -2s;
+        .modal-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: linear-gradient(45deg, #ffd200, #ff416c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .orbit-item:nth-child(4) {
-            top: 39%;
-            right: 5%;
-            animation-duration: 14s;
-            animation-delay: -8s;
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
         }
 
-        .orbit-item:nth-child(5) {
-            bottom: 30%;
-            left: 7%;
-            width: 85px;
-            height: 85px;
-            animation-duration: 11s;
-            animation-delay: -5s;
+        .modal-btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.15s;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
         }
 
-        .orbit-item:nth-child(6) {
-            bottom: 25%;
-            right: 8%;
-            animation-duration: 15s;
-            animation-delay: -3s;
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
         }
 
-        .orbit-item:nth-child(7) {
-            bottom: 8%;
-            left: 17%;
-            width: 75px;
-            height: 75px;
-            animation-duration: 13s;
-            animation-delay: -9s;
-        }
-
-        .orbit-item:nth-child(8) {
-            bottom: 7%;
-            right: 16%;
-            width: 90px;
-            height: 90px;
-            animation-duration: 17s;
-            animation-delay: -6s;
-        }
-
-        @keyframes orbit-spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (max-width: 600px) {
-            body {
-                align-items: flex-start;
-                padding: 28px 14px;
-            }
-
-            .container {
-                max-width: 450px;
-            }
-
-            h1 {
-                margin-bottom: 20px;
-            }
-
-            .photos {
-                gap: 8px;
-            }
-
-            .photos img {
-                height: clamp(125px, 43vw, 190px);
-            }
-
-            .promo-text {
-                font-size: 14px;
-            }
-
-            .petition-container {
-                padding: 22px 13px;
-            }
-
-            .petition-count {
-                margin-bottom: 18px;
-            }
-
-            .petition-number {
-                font-size: clamp(40px, 12vw, 54px);
-            }
-
-            .petition-label {
-                font-size: 13px;
-            }
-
-            .petition-btn,
-            .links a {
-                font-size: 14px;
-                padding: 12px 8px;
-            }
-
-            .orbit-item {
-                width: 65px;
-                height: 65px;
-                opacity: 0.9;
-            }
-
-            .orbit-item:nth-child(3),
-            .orbit-item:nth-child(5),
-            .orbit-item:nth-child(7) {
-                width: 55px;
-                height: 55px;
-            }
-
-            .orbit-item:nth-child(8) {
-                width: 70px;
-                height: 70px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .orbit-item {
-                animation-duration: 60s;
-            }
-
-            html {
-                scroll-behavior: auto;
-            }
+        .modal-btn.secondary {
+            background: #282d3d;
+            color: #9aa4bf;
         }
     </style>
 </head>
 <body>
 
-    <div class="orbit-field" aria-hidden="true">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
-        <img class="orbit-item" src="immaginegira.png" alt="">
+    <!-- Popup Dialog: Do you want to play fledjes shooter? -->
+    <div id="gamePromptModal" class="modal-overlay">
+        <div class="modal-box">
+            <img src="face.png" alt="Fledje" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 12px; border: 2px solid #ff4b2b;">
+            <h2 class="modal-title">Play Fledje's Shooter?</h2>
+            <p style="font-size: 14px; color: #cbd5e1; line-height: 1.5;">
+                Do you want to play Fledje's Shooter game right now? Defeat Toilets, take down the Final Boss & climb the Global Leaderboard!
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeGamePrompt()">No, show info</button>
+                <a href="game.html" class="modal-btn primary"><i class="fa-solid fa-gamepad"></i> YES, PLAY!</a>
+            </div>
+        </div>
     </div>
 
     <div class="container">
 
-        <h1>rohans bubu bear</h1>
+        <!-- Top Direct Play Button -->
+        <a href="game.html" class="game-featured-banner">
+            <i class="fa-solid fa-gamepad fa-xl"></i>
+            <span>PLAY FLEDJE SHOOTER NOW</span>
+        </a>
+
+        <h1>fledje gheorghe rohan</h1>
 
         <div class="photos">
-            <img src="fledje.jpg" alt="Foto 1" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Foto+1'">
-            <img src="fledje2.png" alt="Foto 2" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Foto+2'">
+            <img src="fledje.jpg" alt="Photo 1" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Photo+1'">
+            <img src="fledje2.png" alt="Photo 2" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Photo+2'">
         </div>
 
         <p class="promo-text">ONLYFANS promo free monthly subscription</p>
@@ -405,27 +300,22 @@
 
         <div class="videos">
             <div class="video-card">
-
                 <video class="video-player" controls playsinline preload="metadata">
                     <source src="fledje.mp4" type="video/mp4">
-                    Il tuo browser non supporta la riproduzione video.
+                    Your browser does not support video playback.
                 </video>
-
             </div>
 
             <div class="video-card">
-
                 <video class="video-player" controls playsinline preload="metadata">
                     <source src="fledje2.mp4" type="video/mp4">
-                    Il tuo browser non supporta la riproduzione video.
+                    Your browser does not support video playback.
                 </video>
-
             </div>
         </div>
 
         <div class="petition-container">
             <p class="petition-count" id="petitionCounter">
-                
                 <span class="petition-number" id="petitionNumber">47</span>
                 <span class="petition-label">people signed for his new haircut</span>
             </p>
@@ -434,7 +324,11 @@
             </button>
         </div>
 
+        <!-- Links with Always Visible Play Shooter Button at the Bottom -->
         <div class="links">
+            <a href="game.html" style="background: linear-gradient(135deg, #ff416c, #ff4b2b); font-size: 16px; border: 1px solid #ff758c; box-shadow: 0 0 15px rgba(255, 75, 43, 0.4);">
+                <i class="fa-solid fa-gamepad"></i> 🎮 PLAY FLEDJE SHOOTER (Leaderboard)
+            </a>
             <a href="https://discord.gg/qFztNJx7ed" target="_blank" rel="noopener">
                 <i class="fa-brands fa-discord"></i> JOIN Discord
             </a>
@@ -449,8 +343,12 @@
     </div>
 
     <script>
-        let signed = false;
+        // Modal popup controller
+        function closeGamePrompt() {
+            document.getElementById('gamePromptModal').classList.add('hidden');
+        }
 
+        let signed = false;
         function signPetition() {
             const btn = document.getElementById('petitionBtn');
             const counter = document.getElementById('petitionNumber');
@@ -461,10 +359,11 @@
                 btn.classList.add('signed');
                 signed = true;
             } else {
-                alert("Hai già firmato la petizione!");
+                alert("You have already signed the petition!");
             }
         }
 
+        // Pause other video when one plays
         document.querySelectorAll('.video-player').forEach(video => {
             video.addEventListener('play', () => {
                 document.querySelectorAll('.video-player').forEach(otherVideo => {
