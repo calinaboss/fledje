@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fledje Poop Shooter - Official Game & Leaderboard</title>
+    <title>Fledje Poop Shooter</title>
     <link rel="icon" href="face.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -17,30 +17,29 @@
         }
 
         body {
-            background-color: #0b0d13;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #eeeeee;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
+            padding: 8px;
             overflow-x: hidden;
             touch-action: manipulation;
         }
 
         .header-bar {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 16px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #1c1c1c;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #2e2e2e;
         }
 
         .user-section {
@@ -50,47 +49,39 @@
         }
 
         .btn-ui {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: #fff;
+            background: #e63946;
+            color: #ffffff;
             border: none;
             padding: 8px 14px;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 13px;
-            transition: transform 0.15s, opacity 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .btn-ui:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
+        .btn-ui:active {
+            opacity: 0.85;
         }
 
         .btn-ui.secondary {
-            background: #2a2e3d;
-            border: 1px solid #454d66;
+            background: #2b2b2b;
+            color: #cccccc;
+            border: 1px solid #404040;
         }
 
-        /* Responsive Game Canvas Wrapper */
+        /* Responsive Big Game Screen */
         .game-wrapper {
             position: relative;
             width: 100%;
-            max-width: 900px;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            border-radius: 14px;
+            max-width: 950px;
+            height: clamp(420px, 68vh, 650px);
+            background: #000000;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 75, 43, 0.3);
-            border: 2px solid #333a4d;
-        }
-
-        @media (max-width: 600px) {
-            .game-wrapper {
-                aspect-ratio: 4 / 3;
-            }
+            border: 1px solid #333333;
         }
 
         canvas {
@@ -108,7 +99,6 @@
             justify-content: center;
             align-items: center;
             background: rgba(0, 0, 0, 0.82);
-            backdrop-filter: blur(5px);
             z-index: 10;
             padding: 20px;
             text-align: center;
@@ -119,32 +109,30 @@
         }
 
         .overlay-title {
-            font-size: clamp(24px, 5vw, 38px);
-            font-weight: 900;
+            font-size: clamp(26px, 6vw, 36px);
+            font-weight: 800;
             margin-bottom: 12px;
-            background: linear-gradient(45deg, #f7971e, #ffd200);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffffff;
         }
 
-        /* Mobile Controls Toolbar - Big easy touch buttons */
+        /* Mobile Controls */
         .mobile-controls {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr;
-            gap: 10px;
-            margin-top: 12px;
+            grid-template-columns: 1fr 1.3fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .mobile-touch-btn {
-            background: #1e2433;
+            background: #222222;
             color: #ffffff;
-            border: 2px solid #333d54;
-            border-radius: 12px;
-            padding: 16px 8px;
-            font-size: 16px;
-            font-weight: 900;
+            border: 1px solid #383838;
+            border-radius: 8px;
+            padding: 16px 6px;
+            font-size: 15px;
+            font-weight: 700;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -152,81 +140,68 @@
             gap: 4px;
             cursor: pointer;
             touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
         }
 
         .mobile-touch-btn:active, .mobile-touch-btn.active {
-            background: #3b4666;
-            transform: scale(0.96);
+            background: #333333;
         }
 
         .mobile-touch-btn.shoot {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            border-color: #ff758c;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+            background: #e63946;
+            border-color: #e63946;
+            color: #ffffff;
         }
 
         .mobile-touch-btn.shoot:active {
-            background: #e63946;
+            background: #c92a37;
         }
 
-        /* Dashboard Grid */
+        /* Clean Simple Leaderboard (No Security / D1 text clutter) */
         .dashboard-grid {
             width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        @media (max-width: 720px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+            max-width: 950px;
+            margin-top: 10px;
         }
 
         .card {
-            background: #151821;
-            border: 1px solid #232938;
-            border-radius: 12px;
-            padding: 16px;
+            background: #1c1c1c;
+            border: 1px solid #2e2e2e;
+            border-radius: 8px;
+            padding: 14px;
         }
 
         .card-title {
             font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ffd200;
+            color: #f1f1f1;
         }
 
         .leaderboard-list {
             list-style: none;
-            max-height: 260px;
+            max-height: 220px;
             overflow-y: auto;
         }
 
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 7px 8px;
+            border-bottom: 1px solid #282828;
             font-size: 14px;
         }
 
         .leaderboard-item:first-child {
-            background: rgba(255, 215, 0, 0.12);
+            background: rgba(255, 255, 255, 0.06);
             font-weight: bold;
-            color: #ffd700;
+            color: #ffcc00;
         }
 
         .leaderboard-item span.rank {
-            width: 28px;
+            width: 25px;
             display: inline-block;
         }
 
@@ -247,21 +222,21 @@
         }
 
         .modal-content {
-            background: #171b26;
-            border: 1px solid #2b334a;
-            border-radius: 16px;
+            background: #1e1e1e;
+            border: 1px solid #333333;
+            border-radius: 10px;
             width: 100%;
-            max-width: 380px;
-            padding: 24px;
+            max-width: 360px;
+            padding: 22px;
             text-align: center;
         }
 
         .modal-input {
             width: 100%;
-            background: #0d0f17;
-            border: 1px solid #363e59;
-            border-radius: 8px;
-            color: #fff;
+            background: #121212;
+            border: 1px solid #383838;
+            border-radius: 6px;
+            color: #ffffff;
             padding: 12px 14px;
             margin: 10px 0;
             font-size: 15px;
@@ -269,13 +244,13 @@
         }
 
         .modal-input:focus {
-            border-color: #ff4b2b;
+            border-color: #e63946;
         }
 
         .auth-toggle {
             margin-top: 12px;
             font-size: 13px;
-            color: #9aa4bf;
+            color: #aaaaaa;
             cursor: pointer;
             text-decoration: underline;
         }
@@ -286,14 +261,14 @@
     <!-- Header bar with User Profile / Login -->
     <header class="header-bar">
         <div>
-            <a href="index.html" style="color: #9aa4bf; text-decoration: none; font-size: 13px;">
-                <i class="fa-solid fa-arrow-left"></i> Back to Fledje's Site
+            <a href="index.html" style="color: #999999; text-decoration: none; font-size: 13px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Fledje
             </a>
-            <h1 style="font-size: 16px; margin-top: 2px; font-weight: bold;">Fledje Poop Shooter</h1>
+            <h1 style="font-size: 15px; margin-top: 2px; font-weight: 700; color: #ffffff;">Fledje Poop Shooter</h1>
         </div>
 
         <div class="user-section">
-            <span id="userGreeting" style="font-size: 13px; color: #a0aec0;">Guest</span>
+            <span id="userGreeting" style="font-size: 13px; color: #aaaaaa;">Guest</span>
             <button id="authBtn" class="btn-ui secondary" onclick="openAuthModal()">
                 <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
             </button>
@@ -303,25 +278,25 @@
         </div>
     </header>
 
-    <!-- Game Canvas Screen -->
+    <!-- Large Game Canvas Screen -->
     <div class="game-wrapper" id="gameContainer">
-        <canvas id="gameCanvas" width="900" height="500"></canvas>
+        <canvas id="gameCanvas" width="900" height="600"></canvas>
 
         <!-- Start / Game Over Overlay -->
         <div id="gameOverlay" class="game-overlay">
-            <h2 id="overlayTitle" class="overlay-title">FLEDJE THE SHOOTER</h2>
-            <p id="overlaySubtitle" style="margin-bottom: 20px; max-width: 460px; line-height: 1.5; color: #cbd5e1; font-size: 15px;">
-                Move Fledje's Face with <kbd>A</kbd>/<kbd>D</kbd> or touch buttons.<br>
-                Shoot 💩 with <kbd>Space</kbd>, Click or Tap to blast the Toilets!<br>
-                Giant slow toilets fall from above. Survive & reach 100 pts to summon the <strong>FINAL BOSS</strong> with 100,000 HP!
+            <h2 id="overlayTitle" class="overlay-title">FLEDJE SHOOTER</h2>
+            <p id="overlaySubtitle" style="margin-bottom: 18px; max-width: 440px; line-height: 1.5; color: #cccccc; font-size: 14px;">
+                Move with touch buttons or drag on screen.<br>
+                Giant slow toilets fall from above.<br>
+                Survive and defeat the <strong>FINAL BOSS</strong> (100,000 HP)!
             </p>
-            <button id="startBtn" class="btn-ui" style="font-size: 18px; padding: 14px 32px;" onclick="startGame()">
+            <button id="startBtn" class="btn-ui" style="font-size: 17px; padding: 12px 28px;" onclick="startGame()">
                 <i class="fa-solid fa-play"></i> START GAME
             </button>
         </div>
     </div>
 
-    <!-- Mobile Touch Controls (Always available & responsive) -->
+    <!-- Mobile Touch Controls -->
     <div class="mobile-controls">
         <button class="mobile-touch-btn" id="btnLeft">
             <i class="fa-solid fa-arrow-left fa-lg"></i>
@@ -337,52 +312,40 @@
         </button>
     </div>
 
-    <!-- Leaderboard and Security info -->
+    <!-- Clean Simple Leaderboard -->
     <div class="dashboard-grid">
         <div class="card">
             <div class="card-title">
-                <i class="fa-solid fa-trophy"></i> GLOBAL LEADERBOARD (Cloudflare D1)
+                <i class="fa-solid fa-trophy" style="color: #ffcc00;"></i> LEADERBOARD
             </div>
             <ul id="leaderboardList" class="leaderboard-list">
                 <li class="leaderboard-item"><span>Loading leaderboard...</span></li>
             </ul>
-            <button class="btn-ui secondary" style="width: 100%; margin-top: 12px; justify-content: center;" onclick="loadLeaderboard()">
+            <button class="btn-ui secondary" style="width: 100%; margin-top: 10px; justify-content: center;" onclick="loadLeaderboard()">
                 <i class="fa-solid fa-rotate"></i> Refresh Leaderboard
             </button>
         </div>
-
-        <div class="card">
-            <div class="card-title">
-                <i class="fa-solid fa-shield-halved"></i> OWASP SECURITY & EDGE CLOUD
-            </div>
-            <div style="font-size: 13px; color: #9aa4bf; line-height: 1.6;">
-                <p>• <strong>Password Protection:</strong> PBKDF2 hashing (100,000 rounds) + unique 16-byte cryptographic salt.</p>
-                <p>• <strong>Anti SQL-Injection:</strong> Strict parameterized Cloudflare D1 queries with bound inputs.</p>
-                <p>• <strong>Signed Sessions:</strong> Tamper-proof HMAC-SHA256 session tokens stored securely.</p>
-                <p>• <strong>Fast & Safe Hosting:</strong> Cloudflare Pages & Workers with DDoS protection & OWASP Security Headers.</p>
-            </div>
-        </div>
     </div>
 
-    <!-- Authentication Modal (Register / Login) -->
+    <!-- Authentication Modal -->
     <div id="authModal" class="modal hidden">
         <div class="modal-content">
-            <h3 id="modalAuthTitle" style="margin-bottom: 8px;">Log In to Your Account</h3>
-            <p style="font-size: 13px; color: #9aa4bf; margin-bottom: 15px;">Save your highscores on the global leaderboard</p>
+            <h3 id="modalAuthTitle" style="margin-bottom: 8px;">Log In</h3>
+            <p style="font-size: 13px; color: #999999; margin-bottom: 14px;">Save your highscores on the leaderboard</p>
             
             <input type="text" id="authUsername" class="modal-input" placeholder="Username (3-20 characters)" maxlength="20" autocomplete="username">
             <input type="password" id="authPassword" class="modal-input" placeholder="Password (min 4 characters)" maxlength="64" autocomplete="current-password">
             
-            <div id="authFeedback" style="font-size: 13px; color: #ff416c; margin-bottom: 10px; min-height: 18px;"></div>
+            <div id="authFeedback" style="font-size: 13px; color: #e63946; margin-bottom: 10px; min-height: 18px;"></div>
 
-            <button id="modalSubmitBtn" class="btn-ui" style="width: 100%; justify-content: center; padding: 12px;" onclick="submitAuth()">
+            <button id="modalSubmitBtn" class="btn-ui" style="width: 100%; justify-content: center; padding: 11px;" onclick="submitAuth()">
                 Log In
             </button>
 
             <p class="auth-toggle" id="authToggleText" onclick="toggleAuthMode()">
-                Don't have an account? Sign up now
+                Don't have an account? Sign up
             </p>
-            <p class="auth-toggle" style="margin-top: 8px; color: #64748b;" onclick="closeAuthModal()">
+            <p class="auth-toggle" style="margin-top: 8px; color: #666666;" onclick="closeAuthModal()">
                 Close
             </p>
         </div>
@@ -390,7 +353,7 @@
 
     <script>
         // ==========================================
-        // USER AUTHENTICATION STATE (OWASP)
+        // AUTHENTICATION
         // ==========================================
         let currentUser = null;
         let authToken = localStorage.getItem('fledje_token') || null;
@@ -426,9 +389,9 @@
 
         function toggleAuthMode() {
             isRegisterMode = !isRegisterMode;
-            document.getElementById('modalAuthTitle').textContent = isRegisterMode ? 'Create Your Account' : 'Log In to Your Account';
+            document.getElementById('modalAuthTitle').textContent = isRegisterMode ? 'Create Account' : 'Log In';
             document.getElementById('modalSubmitBtn').textContent = isRegisterMode ? 'Sign Up' : 'Log In';
-            document.getElementById('authToggleText').textContent = isRegisterMode ? 'Already have an account? Log in' : "Don't have an account? Sign up now";
+            document.getElementById('authToggleText').textContent = isRegisterMode ? 'Already have an account? Log in' : "Don't have an account? Sign up";
             document.getElementById('authFeedback').textContent = '';
         }
 
@@ -480,7 +443,7 @@
         }
 
         // ==========================================
-        // LEADERBOARD (CLOUDFLARE D1)
+        // LEADERBOARD
         // ==========================================
         async function loadLeaderboard() {
             const list = document.getElementById('leaderboardList');
@@ -492,8 +455,8 @@
 
                 if (!res.ok || !data.leaderboard || data.leaderboard.length === 0) {
                     list.innerHTML = `
-                        <li class="leaderboard-item"><span>1. Fledje (Pro)</span> <span>9990 pts 👑</span></li>
-                        <li class="leaderboard-item"><span>No scores in database yet. Be the first!</span></li>
+                        <li class="leaderboard-item"><span>1. Fledje (Pro)</span> <span>9,990 pts 👑</span></li>
+                        <li class="leaderboard-item"><span>No scores registered yet. Be the first!</span></li>
                     `;
                     return;
                 }
@@ -511,8 +474,7 @@
                 });
             } catch (e) {
                 list.innerHTML = `
-                    <li class="leaderboard-item"><span>1. Fledje (Pro)</span> <span>9990 pts 👑</span></li>
-                    <li class="leaderboard-item" style="color: #a0aec0;"><span>Connect Cloudflare D1 to show live scores!</span></li>
+                    <li class="leaderboard-item"><span>1. Fledje (Pro)</span> <span>9,990 pts 👑</span></li>
                 `;
             }
         }
@@ -544,13 +506,11 @@
                     })
                 });
                 loadLeaderboard();
-            } catch (err) {
-                console.warn('Score submission failed:', err);
-            }
+            } catch (err) {}
         }
 
         // ==========================================
-        // EASY SLOW ARCADE ENGINE (CANVAS)
+        // GAME ENGINE (Big, Slow & Easy)
         // ==========================================
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -563,7 +523,6 @@
         const bgImg = new Image(); bgImg.src = 'mappa.jpg';
         const explosionImg = new Image(); explosionImg.src = 'explosion.png';
 
-        // Sound Effects (Web Audio API fallback + MP3 if present)
         const shootSound = new Audio('shootsound.mp3');
         const explosionSound = new Audio('bithuh-vine-boom-392646.mp3');
 
@@ -589,43 +548,39 @@
 
         let gameRunning = false;
         let score = 0;
-        let lives = 5; // Easy mode: 5 lives!
+        let lives = 10; // Extra lives for easy gameplay!
         let gameStartTime = 0;
         let lastSpawnTime = 0;
         let bossSpawned = false;
         let bossDefeated = false;
 
-        // Player (Fledje)
+        // Player: Bigger face for clear view
         const player = {
-            x: 420,
-            y: 410,
-            width: 70,
-            height: 70,
-            speed: 5.5
+            x: 410,
+            y: 500,
+            width: 80,
+            height: 80,
+            speed: 6.5
         };
 
-        // Projectiles (Poop)
         let bullets = [];
-        // Enemies (Toilets)
         let enemies = [];
-        // Particles
         let particles = [];
 
-        // Final Boss: 100,000 HP, huge hitbox for easy shooting!
+        // Final Boss: 100,000 HP, Huge Hitbox!
         const BOSS_MAX_HP = 100000;
         let boss = {
             active: false,
-            x: 350,
+            x: 310,
             y: 40,
-            width: 220,     // Very large easy target!
-            height: 180,
+            width: 280,     // Extra large easy target!
+            height: 220,
             health: BOSS_MAX_HP,
             maxHealth: BOSS_MAX_HP,
-            speedX: 1.5,    // Slow easy motion
+            speedX: 1.2,    // Very slow easy movement
             direction: 1
         };
 
-        // Inputs
         const keys = { left: false, right: false, space: false };
 
         window.addEventListener('keydown', (e) => {
@@ -644,7 +599,7 @@
             if (e.code === 'Space') keys.space = false;
         });
 
-        // Touch Control Listeners (Smooth on Mobile)
+        // Touch buttons
         const btnLeft = document.getElementById('btnLeft');
         const btnRight = document.getElementById('btnRight');
         const btnShoot = document.getElementById('btnShoot');
@@ -661,19 +616,18 @@
 
         setupTouchButton(btnLeft, () => { keys.left = true; }, () => { keys.left = false; });
         setupTouchButton(btnRight, () => { keys.right = true; }, () => { keys.right = false; });
-        
-        // Rapid fire hold support on mobile shoot button
+
         let shootInterval = null;
         setupTouchButton(btnShoot, () => {
             if (gameRunning) {
                 shootPoop();
-                shootInterval = setInterval(() => { if (gameRunning) shootPoop(); }, 220);
+                shootInterval = setInterval(() => { if (gameRunning) shootPoop(); }, 200);
             }
         }, () => {
             if (shootInterval) clearInterval(shootInterval);
         });
 
-        // Touch & Drag directly on the canvas to move & shoot easily
+        // Direct Touch & Drag on Screen
         canvas.addEventListener('pointerdown', (e) => {
             if (!gameRunning) return;
             handleCanvasPointer(e);
@@ -694,13 +648,13 @@
 
         function shootPoop() {
             playShootSound();
-            // Shoots wide poop bullet
+            // Big clearly visible poop (46x46 px)
             bullets.push({
-                x: player.x + player.width / 2 - 16,
-                y: player.y - 12,
-                width: 32,
-                height: 32,
-                speedY: 7,
+                x: player.x + player.width / 2 - 23,
+                y: player.y - 15,
+                width: 46,
+                height: 46,
+                speedY: 7.5,
                 rotation: 0
             });
         }
@@ -722,7 +676,7 @@
 
         function startGame() {
             score = 0;
-            lives = 5;
+            lives = 10;
             bullets = [];
             enemies = [];
             particles = [];
@@ -744,11 +698,11 @@
             if (shootInterval) clearInterval(shootInterval);
             const durationSec = Math.floor((Date.now() - gameStartTime) / 1000);
             
-            document.getElementById('overlayTitle').textContent = won ? 'VICTORY! YOU BEAT THE BOSS! 🎉' : 'GAME OVER!';
+            document.getElementById('overlayTitle').textContent = won ? 'VICTORY! 🎉' : 'GAME OVER';
             document.getElementById('overlaySubtitle').innerHTML = `
-                ${won ? 'You successfully defeated the Final Boss!' : 'The Toilets caught up!'}<br>
-                Final Score: <strong>${score.toLocaleString()}</strong> pts (${durationSec}s).
-                ${!authToken ? '<br><span style="color: #ffd200;">Log in or create an account to save your score!</span>' : '<br><span style="color: #4ade80;">Score saved to Leaderboard!</span>'}
+                ${won ? 'You defeated the Final Boss!' : 'Better luck next time!'}<br>
+                Score: <strong>${score.toLocaleString()}</strong> pts (${durationSec}s).
+                ${!authToken ? '<br><span style="color: #ffcc00;">Log in to save your score!</span>' : '<br><span style="color: #4ade80;">Score submitted to Leaderboard!</span>'}
             `;
             document.getElementById('startBtn').innerHTML = '<i class="fa-solid fa-rotate-right"></i> PLAY AGAIN';
             document.getElementById('gameOverlay').classList.remove('hidden');
@@ -769,52 +723,51 @@
             for (let i = bullets.length - 1; i >= 0; i--) {
                 const b = bullets[i];
                 b.y -= b.speedY;
-                b.rotation += 0.08;
-                if (b.y < -40) bullets.splice(i, 1);
+                b.rotation += 0.06;
+                if (b.y < -50) bullets.splice(i, 1);
             }
 
-            // Spawn Big Slow Toilets (Slow easy pace)
+            // Spawn Big Slow Toilets (85x85 px, slow falling speed)
             const now = Date.now();
-            if (!boss.active && now - lastSpawnTime > 1600) {
+            if (!boss.active && now - lastSpawnTime > 1800) {
                 enemies.push({
-                    x: Math.random() * (canvas.width - 70),
-                    y: -60,
-                    width: 65,  // Large & clearly visible
-                    height: 65,
-                    speedY: 1.2 + Math.random() * 0.8 // Very slow and easy to dodge
+                    x: Math.random() * (canvas.width - 90),
+                    y: -80,
+                    width: 85,  // Extra big toilet!
+                    height: 85,
+                    speedY: 1.0 + Math.random() * 0.6 // Very slow, super easy to dodge!
                 });
                 lastSpawnTime = now;
             }
 
-            // Trigger Final Boss at 100 points
+            // Trigger Boss at 100 points
             if (score >= 100 && !bossSpawned) {
                 bossSpawned = true;
                 boss.active = true;
                 boss.x = canvas.width / 2 - boss.width / 2;
                 boss.y = 30;
-                enemies = []; // Clear small toilets for boss battle
+                enemies = [];
             }
 
-            // Boss Behavior (Slow & Easy)
+            // Boss Movement
             if (boss.active) {
                 boss.x += boss.speedX * boss.direction;
                 if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) {
                     boss.direction *= -1;
                 }
 
-                // Slow infrequent toilet drops from boss
-                if (Math.random() < 0.015) {
+                if (Math.random() < 0.012) {
                     enemies.push({
-                        x: boss.x + boss.width / 2 - 30,
+                        x: boss.x + boss.width / 2 - 40,
                         y: boss.y + boss.height,
-                        width: 60,
-                        height: 60,
-                        speedY: 1.5
+                        width: 80,
+                        height: 80,
+                        speedY: 1.2
                     });
                 }
             }
 
-            // Update Enemies & Check Collisions
+            // Update Enemies
             for (let i = enemies.length - 1; i >= 0; i--) {
                 const en = enemies[i];
                 en.y += en.speedY;
@@ -827,18 +780,18 @@
                         createExplosion(en.x + en.width / 2, en.y + en.height / 2);
                         bullets.splice(j, 1);
                         enemies.splice(i, 1);
-                        score += 20; // More points!
+                        score += 20;
                         break;
                     }
                 }
 
-                // Toilet Reaches Bottom (Lose a life gently)
+                // Toilet reaches bottom or hits player
                 if (en && en.y > canvas.height) {
                     enemies.splice(i, 1);
                     lives--;
                     if (lives <= 0) { gameOver(false); return; }
-                } else if (en && en.x < player.x + player.width - 10 && en.x + en.width > player.x + 10 &&
-                           en.y < player.y + player.height - 10 && en.y + en.height > player.y + 10) {
+                } else if (en && en.x < player.x + player.width - 15 && en.x + en.width > player.x + 15 &&
+                           en.y < player.y + player.height - 15 && en.y + en.height > player.y + 15) {
                     createExplosion(player.x + player.width / 2, player.y + player.height / 2);
                     enemies.splice(i, 1);
                     lives--;
@@ -846,17 +799,15 @@
                 }
             }
 
-            // Hit Boss with Poop: -10 HP per poop, massive points accumulation!
+            // Hit Boss with Poop: -10 HP per shot!
             if (boss.active) {
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     const b = bullets[j];
                     if (b.x < boss.x + boss.width && b.x + b.width > boss.x &&
                         b.y < boss.y + boss.height && b.y + b.height > boss.y) {
                         bullets.splice(j, 1);
-                        
-                        // Each poop takes 10 HP from the 100,000 HP bar!
                         boss.health -= 10;
-                        score += 50; // Earn points on every hit
+                        score += 50;
                         createExplosion(b.x, b.y);
 
                         if (boss.health <= 0) {
@@ -891,11 +842,11 @@
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             } else {
-                ctx.fillStyle = '#111625';
+                ctx.fillStyle = '#141414';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // 2. Poop Projectiles
+            // 2. Giant Visible Poop Projectiles
             for (const b of bullets) {
                 ctx.save();
                 ctx.translate(b.x + b.width / 2, b.y + b.height / 2);
@@ -911,7 +862,7 @@
                 ctx.restore();
             }
 
-            // 3. Enemies (Big Slow Toilets)
+            // 3. Giant Slow Toilets
             for (const en of enemies) {
                 if (toiletImg.complete && toiletImg.naturalWidth > 0) {
                     ctx.drawImage(toiletImg, en.x, en.y, en.width, en.height);
@@ -921,38 +872,38 @@
                 }
             }
 
-            // 4. Final Boss & Big 100,000 HP Bar
+            // 4. Final Boss & Big Clean HP Bar
             if (boss.active) {
                 if (bossImg.complete && bossImg.naturalWidth > 0) {
                     ctx.drawImage(bossImg, boss.x, boss.y, boss.width, boss.height);
                 } else {
-                    ctx.fillStyle = '#e11d48';
+                    ctx.fillStyle = '#e63946';
                     ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
                 }
 
-                // Giant Health Bar with exact HP numbers
-                const barWidth = 260;
+                // Clean solid HP Bar
+                const barWidth = 280;
                 const barHeight = 16;
                 const barX = boss.x + (boss.width - barWidth) / 2;
-                const barY = boss.y - 25;
+                const barY = boss.y - 24;
 
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillStyle = '#000000';
                 ctx.fillRect(barX, barY, barWidth, barHeight);
-                ctx.fillStyle = '#ef4444';
+                ctx.fillStyle = '#e63946';
                 const hpPercent = Math.max(0, boss.health / boss.maxHealth);
                 ctx.fillRect(barX, barY, barWidth * hpPercent, barHeight);
                 ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1;
                 ctx.strokeRect(barX, barY, barWidth, barHeight);
 
-                ctx.fillStyle = '#ffd200';
-                ctx.font = 'bold 11px Arial';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`FINAL BOSS HP: ${boss.health.toLocaleString()} / 100,000`, barX + barWidth / 2, barY + 12);
+                ctx.fillText(`BOSS HP: ${boss.health.toLocaleString()} / 100,000`, barX + barWidth / 2, barY + 12);
                 ctx.textAlign = 'start';
             }
 
-            // 5. Player (Fledje's Face)
+            // 5. Player
             if (faceImg.complete && faceImg.naturalWidth > 0) {
                 ctx.drawImage(faceImg, player.x, player.y, player.width, player.height);
             } else {
@@ -977,21 +928,22 @@
                 ctx.restore();
             }
 
-            // 7. HUD Status (Score, Lives)
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(12, 12, 220, 40);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.strokeRect(12, 12, 220, 40);
+            // 7. Clean Status HUD (Score, Lives)
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+            ctx.fillRect(10, 10, 230, 38);
+            ctx.strokeStyle = '#333333';
+            ctx.strokeRect(10, 10, 230, 38);
 
-            ctx.fillStyle = '#ffd200';
-            ctx.font = 'bold 15px Arial';
-            ctx.fillText(`SCORE: ${score.toLocaleString()}`, 20, 37);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText(`SCORE: ${score.toLocaleString()}`, 18, 34);
 
-            ctx.fillStyle = '#ef4444';
+            ctx.fillStyle = '#e63946';
             let hearts = '';
-            for (let i = 0; i < lives; i++) hearts += '❤️';
-            ctx.font = '13px Arial';
-            ctx.fillText(hearts, 140, 37);
+            for (let i = 0; i < Math.min(lives, 5); i++) hearts += '❤️';
+            if (lives > 5) hearts += `+${lives - 5}`;
+            ctx.font = '13px sans-serif';
+            ctx.fillText(hearts, 145, 34);
         }
 
         function gameLoop() {
