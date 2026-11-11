@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fledje Poop Shooter - Official Game & Leaderboard</title>
+    <link rel="icon" href="face.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            background-color: #0b0d13;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        .header-bar {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 16px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-ui {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: transform 0.15s, opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-ui:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .btn-ui.secondary {
+            background: #2a2e3d;
+            border: 1px solid #454d66;
+        }
+
+        /* Responsive Game Canvas Wrapper */
+        .game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 75, 43, 0.3);
+            border: 2px solid #333a4d;
+        }
+
+        @media (max-width: 600px) {
+            .game-wrapper {
+                aspect-ratio: 4 / 3;
+            }
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .game-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .game-overlay.hidden {
+            display: none !important;
+        }
+
+        .overlay-title {
+            font-size: clamp(24px, 5vw, 38px);
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: linear-gradient(45deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Mobile Controls Toolbar - Big easy touch buttons */
+        .mobile-controls {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .mobile-touch-btn {
+            background: #1e2433;
+            color: #ffffff;
+            border: 2px solid #333d54;
+            border-radius: 12px;
+            padding: 16px 8px;
+            font-size: 16px;
+            font-weight: 900;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .mobile-touch-btn:active, .mobile-touch-btn.active {
+            background: #3b4666;
+            transform: scale(0.96);
+        }
+
+        .mobile-touch-btn.shoot {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border-color: #ff758c;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+        }
+
+        .mobile-touch-btn.shoot:active {
+            background: #e63946;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 720px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #151821;
+            border: 1px solid #232938;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffd200;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+
+        .leaderboard-item:first-child {
+            background: rgba(255, 215, 0, 0.12);
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .leaderboard-item span.rank {
+            width: 28px;
+            display: inline-block;
+        }
+
+        /* Modal Auth */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 15px;
+        }
+
+        .modal.hidden {
+            display: none !important;
+        }
+
+        .modal-content {
+            background: #171b26;
+            border: 1px solid #2b334a;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: #0d0f17;
+            border: 1px solid #363e59;
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px 14px;
+            margin: 10px 0;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .modal-input:focus {
+            border-color: #ff4b2b;
+        }
+
+        .auth-toggle {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #9aa4bf;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header bar with User Profile / Login -->
+    <header class="header-bar">
+        <div>
+            <a href="index.html" style="color: #9aa4bf; text-decoration: none; font-size: 13px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Fledje's Site
+            </a>
+            <h1 style="font-size: 16px; margin-top: 2px; font-weight: bold;">Fledje Poop Shooter</h1>
+        </div>
+
+        <div class="user-section">
+            <span id="userGreeting" style="font-size: 13px; color: #a0aec0;">Guest</span>
+            <button id="authBtn" class="btn-ui secondary" onclick="openAuthModal()">
+                <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
+            </button>
+            <button id="logoutBtn" class="btn-ui secondary" onclick="logout()" style="display: none;">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Game Canvas Screen -->
+    <div class="game-wrapper" id="gameContainer">
+        <canvas id="gameCanvas" width="900" height="500"></canvas>
+
+        <!-- Start / Game Over Overlay -->
+        <div id="gameOverlay" class="game-overlay">
+            <h2 id="overlayTitle" class="overlay-title">FLEDJE THE SHOOTER</h2>
+            <p id="overlaySubtitle" style="margin-bottom: 20px; max-width: 460px; line-height: 1.5; color: #cbd5e1; font-size: 15px;">
+                Move Fledje's Face with <kbd>A</kbd>/<kbd>D</kbd> or touch buttons.<br>
+                Shoot 💩 with <kbd>Space</kbd>, Click or Tap to blast the Toilets!<br>
+                Giant slow toilets fall from above. Survive & reach 100 pts to summon the <strong>FINAL BOSS</strong> with 100,000 HP!
+            </p>
+            <button id="startBtn" class="btn-ui" style="font-size: 18px; padding: 14px 32px;" onclick="startGame()">
+                <i class="fa-solid fa-play"></i> START GAME
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Touch Controls (Always available & responsive) -->
+    <div class="mobile-controls">
+        <button class="mobile-touch-btn" id="btnLeft">
+            <i class="fa-solid fa-arrow-left fa-lg"></i>
+            <span>LEFT</span>
+        </button>
+        <button class="mobile-touch-btn shoot" id="btnShoot">
+            <i class="fa-solid fa-poo fa-xl"></i>
+            <span>SHOOT 💩</span>
+        </button>
+        <button class="mobile-touch-btn" id="btnRight">
+            <i class="fa-solid fa-arrow-right fa-lg"></i>
+            <span>RIGHT</span>
+        </button>
+    </div>
+
+    <!-- Leaderboard and Security info -->
+    <div class="dashboard-grid">
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-trophy"></i> GLOBAL LEADERBOARD (Cloudflare D1)
+            </div>
+            <ul id="leaderboardList" class="leaderboard-list">
+                <li class="leaderboard-item"><span>Loading leaderboard...</span></li>
+            </ul>
+            <button class="btn-ui secondary" style="width: 100%; margin-top: 12px; justify-content: center;" onclick="loadLeaderboard()">
+                <i class="fa-solid fa-rotate"></i> Refresh Leaderboard
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-shield-halved"></i> OWASP SECURITY & EDGE CLOUD
+            </div>
+            <div style="font-size: 13px; color: #9aa4bf; line-height: 1.6;">
+                <p>• <strong>Password Protection:</strong> PBKDF2 hashing (100,000 rounds) + unique 16-byte cryptographic salt.</p>
+                <p>• <strong>Anti SQL-Injection:</strong> Strict parameterized Cloudflare D1 queries with bound inputs.</p>
+                <p>• <strong>Signed Sessions:</strong> Tamper-proof HMAC-SHA256 session tokens stored securely.</p>
+                <p>• <strong>Fast & Safe Hosting:</strong> Cloudflare Pages & Workers with DDoS protection & OWASP Security Headers.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Modal (Register / Login) -->
+    <div id="authModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modalAuthTitle" style="margin-bottom: 8px;">Log In to Your Account</h3>
+            <p style="font-size: 13px; color: #9aa4bf; margin-bottom: 15px;">Save your highscores on the global leaderboard</p>
+            
+            <input type="text" id="authUsername" class="modal-input" placeholder="Username (3-20 characters)" maxlength="20" autocomplete="username">
+            <input type="password" id="authPassword" class="modal-input" placeholder="Password (min 4 characters)" maxlength="64" autocomplete="current-password">
+            
+            <div id="authFeedback" style="font-size: 13px; color: #ff416c; margin-bottom: 10px; min-height: 18px;"></div>
+
+            <button id="modalSubmitBtn" class="btn-ui" style="width: 100%; justify-content: center; padding: 12px;" onclick="submitAuth()">
+                Log In
+            </button>
+
+            <p class="auth-toggle" id="authToggleText" onclick="toggleAuthMode()">
+                Don't have an account? Sign up now
+            </p>
+            <p class="auth-toggle" style="margin-top: 8px; color: #64748b;" onclick="closeAuthModal()">
+                Close
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // USER AUTHENTICATION STATE (OWASP)
+        // ==========================================
+        let currentUser = null;
+        let authToken = localStorage.getItem('fledje_token') || null;
+        let isRegisterMode = false;
+
+        function updateAuthUI() {
+            const storedUser = localStorage.getItem('fledje_user');
+            if (storedUser && authToken) {
+                try {
+                    currentUser = JSON.parse(storedUser);
+                    document.getElementById('userGreeting').textContent = '👤 ' + currentUser.username;
+                    document.getElementById('authBtn').style.display = 'none';
+                    document.getElementById('logoutBtn').style.display = 'inline-flex';
+                } catch(e) {
+                    logout();
+                }
+            } else {
+                currentUser = null;
+                document.getElementById('userGreeting').textContent = 'Guest';
+                document.getElementById('authBtn').style.display = 'inline-flex';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+        }
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+            document.getElementById('authFeedback').textContent = '';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('modalAuthTitle').textContent = isRegisterMode ? 'Create Your Account' : 'Log In to Your Account';
+            document.getElementById('modalSubmitBtn').textContent = isRegisterMode ? 'Sign Up' : 'Log In';
+            document.getElementById('authToggleText').textContent = isRegisterMode ? 'Already have an account? Log in' : "Don't have an account? Sign up now";
+            document.getElementById('authFeedback').textContent = '';
+        }
+
+        async function submitAuth() {
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const feedback = document.getElementById('authFeedback');
+
+            if (!username || !password) {
+                feedback.textContent = 'Please fill out both fields!';
+                return;
+            }
+
+            feedback.textContent = 'Authenticating...';
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: isRegisterMode ? 'register' : 'login',
+                        username,
+                        password
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    feedback.textContent = data.error || 'Authentication error';
+                    return;
+                }
+
+                authToken = data.token;
+                currentUser = data.user;
+                localStorage.setItem('fledje_token', authToken);
+                localStorage.setItem('fledje_user', JSON.stringify(currentUser));
+                updateAuthUI();
+                closeAuthModal();
+                loadLeaderboard();
+            } catch (err) {
+                feedback.textContent = 'Network or server error.';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('fledje_token');
+            localStorage.removeItem('fledje_user');
+            authToken = null;
+            currentUser = null;
+            updateAuthUI();
+        }
+
+        // ==========================================
+        // LEADERBOARD (CLOUDFLARE D1)
+        // ==========================================
+        async function loadLeaderboard() {
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = '<li class="leaderboard-item"><span>Loading leaderboard...</span></li>';
+
+            try {
+                const res = await fetch('/api/leaderboard?mode=classic');
+                const data = await res.json();
+
+                if (!res.ok || !data.leaderboard || data.leaderboard.length === 0) {
+                    list.innerHTML = `
+                        <li class="leaderboard-item"><span>1. Fledje (Pro)</span> <span>9990 pts 👑</span></li>
+                        <li class="leaderboard-item"><span>No scores in database yet. Be the first!</span></li>
+                    `;
+                    return;
+                }
+
+                list.innerHTML = '';
+                data.leaderboard.forEach((item, idx) => {
+                    const li = document.createElement('li');
+                    li.className = 'leaderboard-item';
+                    const bossTag = item.boss_defeated ? ' 👑' : '';
+                    li.innerHTML = `
+                        <span><strong class="rank">${idx + 1}.</strong> ${escapeHtml(item.username)}</span>
+                        <span><strong>${item.score.toLocaleString()}</strong> pts${bossTag}</span>
+                    `;
+                    list.appendChild(li);
+                });
+            } catch (e) {
+                list.innerHTML = `
+                    <li class="leaderboard-item"><span>1. Fledje (Pro)</span> <span>9990 pts 👑</span></li>
+                    <li class="leaderboard-item" style="color: #a0aec0;"><span>Connect Cloudflare D1 to show live scores!</span></li>
+                `;
+            }
+        }
+
+        function escapeHtml(string) {
+            const div = document.createElement('div');
+            div.innerText = string;
+            return div.innerHTML;
+        }
+
+        async function submitScore(score, bossDefeated, durationSec) {
+            if (!authToken) {
+                openAuthModal();
+                return;
+            }
+
+            try {
+                await fetch('/api/leaderboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        score,
+                        game_mode: 'classic',
+                        boss_defeated: bossDefeated ? 1 : 0,
+                        duration_sec: durationSec
+                    })
+                });
+                loadLeaderboard();
+            } catch (err) {
+                console.warn('Score submission failed:', err);
+            }
+        }
+
+        // ==========================================
+        // EASY SLOW ARCADE ENGINE (CANVAS)
+        // ==========================================
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Assets
+        const faceImg = new Image(); faceImg.src = 'face.png';
+        const poopImg = new Image(); poopImg.src = 'poop.png';
+        const toiletImg = new Image(); toiletImg.src = 'toilet.png';
+        const bossImg = new Image(); bossImg.src = 'finalboss.png';
+        const bgImg = new Image(); bgImg.src = 'mappa.jpg';
+        const explosionImg = new Image(); explosionImg.src = 'explosion.png';
+
+        // Sound Effects (Web Audio API fallback + MP3 if present)
+        const shootSound = new Audio('shootsound.mp3');
+        const explosionSound = new Audio('bithuh-vine-boom-392646.mp3');
+
+        function playShootSound() {
+            try {
+                if (shootSound) {
+                    shootSound.currentTime = 0;
+                    shootSound.volume = 0.4;
+                    shootSound.play().catch(() => {});
+                }
+            } catch(e) {}
+        }
+
+        function playExplosionSound() {
+            try {
+                if (explosionSound) {
+                    explosionSound.currentTime = 0;
+                    explosionSound.volume = 0.4;
+                    explosionSound.play().catch(() => {});
+                }
+            } catch(e) {}
+        }
+
+        let gameRunning = false;
+        let score = 0;
+        let lives = 5; // Easy mode: 5 lives!
+        let gameStartTime = 0;
+        let lastSpawnTime = 0;
+        let bossSpawned = false;
+        let bossDefeated = false;
+
+        // Player (Fledje)
+        const player = {
+            x: 420,
+            y: 410,
+            width: 70,
+            height: 70,
+            speed: 5.5
+        };
+
+        // Projectiles (Poop)
+        let bullets = [];
+        // Enemies (Toilets)
+        let enemies = [];
+        // Particles
+        let particles = [];
+
+        // Final Boss: 100,000 HP, huge hitbox for easy shooting!
+        const BOSS_MAX_HP = 100000;
+        let boss = {
+            active: false,
+            x: 350,
+            y: 40,
+            width: 220,     // Very large easy target!
+            height: 180,
+            health: BOSS_MAX_HP,
+            maxHealth: BOSS_MAX_HP,
+            speedX: 1.5,    // Slow easy motion
+            direction: 1
+        };
+
+        // Inputs
+        const keys = { left: false, right: false, space: false };
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'KeyA' || e.code === 'ArrowLeft') keys.left = true;
+            if (e.code === 'KeyD' || e.code === 'ArrowRight') keys.right = true;
+            if (e.code === 'Space') {
+                if (gameRunning) shootPoop();
+                keys.space = true;
+                e.preventDefault();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'KeyA' || e.code === 'ArrowLeft') keys.left = false;
+            if (e.code === 'KeyD' || e.code === 'ArrowRight') keys.right = false;
+            if (e.code === 'Space') keys.space = false;
+        });
+
+        // Touch Control Listeners (Smooth on Mobile)
+        const btnLeft = document.getElementById('btnLeft');
+        const btnRight = document.getElementById('btnRight');
+        const btnShoot = document.getElementById('btnShoot');
+
+        function setupTouchButton(elem, onDown, onUp) {
+            const start = (e) => { e.preventDefault(); elem.classList.add('active'); onDown(); };
+            const end = (e) => { e.preventDefault(); elem.classList.remove('active'); onUp(); };
+            elem.addEventListener('touchstart', start, { passive: false });
+            elem.addEventListener('touchend', end, { passive: false });
+            elem.addEventListener('mousedown', start);
+            elem.addEventListener('mouseup', end);
+            elem.addEventListener('mouseleave', end);
+        }
+
+        setupTouchButton(btnLeft, () => { keys.left = true; }, () => { keys.left = false; });
+        setupTouchButton(btnRight, () => { keys.right = true; }, () => { keys.right = false; });
+        
+        // Rapid fire hold support on mobile shoot button
+        let shootInterval = null;
+        setupTouchButton(btnShoot, () => {
+            if (gameRunning) {
+                shootPoop();
+                shootInterval = setInterval(() => { if (gameRunning) shootPoop(); }, 220);
+            }
+        }, () => {
+            if (shootInterval) clearInterval(shootInterval);
+        });
+
+        // Touch & Drag directly on the canvas to move & shoot easily
+        canvas.addEventListener('pointerdown', (e) => {
+            if (!gameRunning) return;
+            handleCanvasPointer(e);
+            shootPoop();
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+            if (!gameRunning || e.buttons === 0) return;
+            handleCanvasPointer(e);
+        });
+
+        function handleCanvasPointer(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const touchX = (e.clientX - rect.left) * scaleX;
+            player.x = Math.max(0, Math.min(canvas.width - player.width, touchX - player.width / 2));
+        }
+
+        function shootPoop() {
+            playShootSound();
+            // Shoots wide poop bullet
+            bullets.push({
+                x: player.x + player.width / 2 - 16,
+                y: player.y - 12,
+                width: 32,
+                height: 32,
+                speedY: 7,
+                rotation: 0
+            });
+        }
+
+        function createExplosion(x, y) {
+            playExplosionSound();
+            for (let i = 0; i < 6; i++) {
+                particles.push({
+                    x,
+                    y,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    life: 20,
+                    maxLife: 20,
+                    size: Math.random() * 20 + 10
+                });
+            }
+        }
+
+        function startGame() {
+            score = 0;
+            lives = 5;
+            bullets = [];
+            enemies = [];
+            particles = [];
+            bossSpawned = false;
+            bossDefeated = false;
+            boss.active = false;
+            boss.health = BOSS_MAX_HP;
+            player.x = canvas.width / 2 - player.width / 2;
+            gameStartTime = Date.now();
+            lastSpawnTime = Date.now();
+            gameRunning = true;
+
+            document.getElementById('gameOverlay').classList.add('hidden');
+            requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver(won = false) {
+            gameRunning = false;
+            if (shootInterval) clearInterval(shootInterval);
+            const durationSec = Math.floor((Date.now() - gameStartTime) / 1000);
+            
+            document.getElementById('overlayTitle').textContent = won ? 'VICTORY! YOU BEAT THE BOSS! 🎉' : 'GAME OVER!';
+            document.getElementById('overlaySubtitle').innerHTML = `
+                ${won ? 'You successfully defeated the Final Boss!' : 'The Toilets caught up!'}<br>
+                Final Score: <strong>${score.toLocaleString()}</strong> pts (${durationSec}s).
+                ${!authToken ? '<br><span style="color: #ffd200;">Log in or create an account to save your score!</span>' : '<br><span style="color: #4ade80;">Score saved to Leaderboard!</span>'}
+            `;
+            document.getElementById('startBtn').innerHTML = '<i class="fa-solid fa-rotate-right"></i> PLAY AGAIN';
+            document.getElementById('gameOverlay').classList.remove('hidden');
+
+            if (score > 0) {
+                submitScore(score, bossDefeated, durationSec);
+            }
+        }
+
+        function update() {
+            if (!gameRunning) return;
+
+            // Player Movement
+            if (keys.left && player.x > 0) player.x -= player.speed;
+            if (keys.right && player.x + player.width < canvas.width) player.x += player.speed;
+
+            // Update Poop Bullets
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const b = bullets[i];
+                b.y -= b.speedY;
+                b.rotation += 0.08;
+                if (b.y < -40) bullets.splice(i, 1);
+            }
+
+            // Spawn Big Slow Toilets (Slow easy pace)
+            const now = Date.now();
+            if (!boss.active && now - lastSpawnTime > 1600) {
+                enemies.push({
+                    x: Math.random() * (canvas.width - 70),
+                    y: -60,
+                    width: 65,  // Large & clearly visible
+                    height: 65,
+                    speedY: 1.2 + Math.random() * 0.8 // Very slow and easy to dodge
+                });
+                lastSpawnTime = now;
+            }
+
+            // Trigger Final Boss at 100 points
+            if (score >= 100 && !bossSpawned) {
+                bossSpawned = true;
+                boss.active = true;
+                boss.x = canvas.width / 2 - boss.width / 2;
+                boss.y = 30;
+                enemies = []; // Clear small toilets for boss battle
+            }
+
+            // Boss Behavior (Slow & Easy)
+            if (boss.active) {
+                boss.x += boss.speedX * boss.direction;
+                if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) {
+                    boss.direction *= -1;
+                }
+
+                // Slow infrequent toilet drops from boss
+                if (Math.random() < 0.015) {
+                    enemies.push({
+                        x: boss.x + boss.width / 2 - 30,
+                        y: boss.y + boss.height,
+                        width: 60,
+                        height: 60,
+                        speedY: 1.5
+                    });
+                }
+            }
+
+            // Update Enemies & Check Collisions
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const en = enemies[i];
+                en.y += en.speedY;
+
+                // Hit Toilet with Poop
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    const b = bullets[j];
+                    if (b.x < en.x + en.width && b.x + b.width > en.x &&
+                        b.y < en.y + en.height && b.y + b.height > en.y) {
+                        createExplosion(en.x + en.width / 2, en.y + en.height / 2);
+                        bullets.splice(j, 1);
+                        enemies.splice(i, 1);
+                        score += 20; // More points!
+                        break;
+                    }
+                }
+
+                // Toilet Reaches Bottom (Lose a life gently)
+                if (en && en.y > canvas.height) {
+                    enemies.splice(i, 1);
+                    lives--;
+                    if (lives <= 0) { gameOver(false); return; }
+                } else if (en && en.x < player.x + player.width - 10 && en.x + en.width > player.x + 10 &&
+                           en.y < player.y + player.height - 10 && en.y + en.height > player.y + 10) {
+                    createExplosion(player.x + player.width / 2, player.y + player.height / 2);
+                    enemies.splice(i, 1);
+                    lives--;
+                    if (lives <= 0) { gameOver(false); return; }
+                }
+            }
+
+            // Hit Boss with Poop: -10 HP per poop, massive points accumulation!
+            if (boss.active) {
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    const b = bullets[j];
+                    if (b.x < boss.x + boss.width && b.x + b.width > boss.x &&
+                        b.y < boss.y + boss.height && b.y + b.height > boss.y) {
+                        bullets.splice(j, 1);
+                        
+                        // Each poop takes 10 HP from the 100,000 HP bar!
+                        boss.health -= 10;
+                        score += 50; // Earn points on every hit
+                        createExplosion(b.x, b.y);
+
+                        if (boss.health <= 0) {
+                            boss.active = false;
+                            bossDefeated = true;
+                            score += 5000;
+                            createExplosion(boss.x + boss.width / 2, boss.y + boss.height / 2);
+                            gameOver(true);
+                            return;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Background Map
+            if (bgImg.complete && bgImg.naturalWidth > 0) {
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = '#111625';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // 2. Poop Projectiles
+            for (const b of bullets) {
+                ctx.save();
+                ctx.translate(b.x + b.width / 2, b.y + b.height / 2);
+                ctx.rotate(b.rotation);
+                if (poopImg.complete && poopImg.naturalWidth > 0) {
+                    ctx.drawImage(poopImg, -b.width / 2, -b.height / 2, b.width, b.height);
+                } else {
+                    ctx.fillStyle = '#8B4513';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, b.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            // 3. Enemies (Big Slow Toilets)
+            for (const en of enemies) {
+                if (toiletImg.complete && toiletImg.naturalWidth > 0) {
+                    ctx.drawImage(toiletImg, en.x, en.y, en.width, en.height);
+                } else {
+                    ctx.fillStyle = '#e2e8f0';
+                    ctx.fillRect(en.x, en.y, en.width, en.height);
+                }
+            }
+
+            // 4. Final Boss & Big 100,000 HP Bar
+            if (boss.active) {
+                if (bossImg.complete && bossImg.naturalWidth > 0) {
+                    ctx.drawImage(bossImg, boss.x, boss.y, boss.width, boss.height);
+                } else {
+                    ctx.fillStyle = '#e11d48';
+                    ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+                }
+
+                // Giant Health Bar with exact HP numbers
+                const barWidth = 260;
+                const barHeight = 16;
+                const barX = boss.x + (boss.width - barWidth) / 2;
+                const barY = boss.y - 25;
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+                ctx.fillStyle = '#ef4444';
+                const hpPercent = Math.max(0, boss.health / boss.maxHealth);
+                ctx.fillRect(barX, barY, barWidth * hpPercent, barHeight);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+                ctx.fillStyle = '#ffd200';
+                ctx.font = 'bold 11px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`FINAL BOSS HP: ${boss.health.toLocaleString()} / 100,000`, barX + barWidth / 2, barY + 12);
+                ctx.textAlign = 'start';
+            }
+
+            // 5. Player (Fledje's Face)
+            if (faceImg.complete && faceImg.naturalWidth > 0) {
+                ctx.drawImage(faceImg, player.x, player.y, player.width, player.height);
+            } else {
+                ctx.fillStyle = '#3b82f6';
+                ctx.beginPath();
+                ctx.arc(player.x + player.width / 2, player.y + player.height / 2, player.width / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 6. Explosions
+            for (const p of particles) {
+                ctx.save();
+                ctx.globalAlpha = p.life / p.maxLife;
+                if (explosionImg.complete && explosionImg.naturalWidth > 0) {
+                    ctx.drawImage(explosionImg, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+                } else {
+                    ctx.fillStyle = '#ff9800';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size / 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            // 7. HUD Status (Score, Lives)
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(12, 12, 220, 40);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.strokeRect(12, 12, 220, 40);
+
+            ctx.fillStyle = '#ffd200';
+            ctx.font = 'bold 15px Arial';
+            ctx.fillText(`SCORE: ${score.toLocaleString()}`, 20, 37);
+
+            ctx.fillStyle = '#ef4444';
+            let hearts = '';
+            for (let i = 0; i < lives; i++) hearts += '❤️';
+            ctx.font = '13px Arial';
+            ctx.fillText(hearts, 140, 37);
+        }
+
+        function gameLoop() {
+            if (gameRunning) {
+                update();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // Init
+        updateAuthUI();
+        loadLeaderboard();
+    </script>
+</body>
+</html>

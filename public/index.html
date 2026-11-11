@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fledje gheorghe rohan</title>
+    <link rel="icon" href="face.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 16px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: clamp(25px, 6vw, 32px);
+            font-weight: normal;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Top Game Banner */
+        .game-featured-banner {
+            display: block;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(255, 75, 43, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-featured-banner:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 35px rgba(255, 75, 43, 0.8);
+        }
+
+        .photos {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .photos img {
+            width: 50%;
+            height: clamp(140px, 42vw, 200px);
+            object-fit: cover;
+            display: block;
+            min-width: 0;
+            border-radius: 8px;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            color: #ffffff;
+            overflow-wrap: anywhere;
+        }
+
+        .videos {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin: 24px 0;
+        }
+
+        .video-card {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .video-player {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: transparent;
+            border: none;
+            outline: none;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .petition-container {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .petition-count {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .petition-number {
+            font-weight: bold;
+            font-size: 26px;
+            color: #ffd700;
+        }
+
+        .petition-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .petition-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Popup */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.hidden {
+            display: none !important;
+        }
+
+        .modal-box {
+            background: #161922;
+            border: 2px solid #ff4b2b;
+            box-shadow: 0 10px 40px rgba(255, 75, 43, 0.4);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 400px;
+            padding: 28px 24px;
+            text-align: center;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: linear-gradient(45deg, #ffd200, #ff416c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.15s;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+        }
+
+        .modal-btn.secondary {
+            background: #282d3d;
+            color: #9aa4bf;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Popup Dialog: Do you want to play fledjes shooter? -->
+    <div id="gamePromptModal" class="modal-overlay">
+        <div class="modal-box">
+            <img src="face.png" alt="Fledje" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 12px; border: 2px solid #ff4b2b;">
+            <h2 class="modal-title">Play Fledje's Shooter?</h2>
+            <p style="font-size: 14px; color: #cbd5e1; line-height: 1.5;">
+                Do you want to play Fledje's Shooter game right now? Defeat Toilets, take down the Final Boss & climb the Global Leaderboard!
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeGamePrompt()">No, show info</button>
+                <a href="game.html" class="modal-btn primary"><i class="fa-solid fa-gamepad"></i> YES, PLAY!</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Top Direct Play Button -->
+        <a href="game.html" class="game-featured-banner">
+            <i class="fa-solid fa-gamepad fa-xl"></i>
+            <span>PLAY FLEDJE SHOOTER NOW</span>
+        </a>
+
+        <h1>fledje gheorghe rohan</h1>
+
+        <div class="photos">
+            <img src="fledje.jpg" alt="Photo 1" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Photo+1'">
+            <img src="fledje2.png" alt="Photo 2" onerror="this.onerror=null;this.src='https://placehold.co/200x200/333/fff?text=Photo+2'">
+        </div>
+
+        <p class="promo-text">ONLYFANS promo free monthly subscription</p>
+        <p class="promo-text">COLLAB WITH TOM PEARL!!!!</p>
+
+        <div class="videos">
+            <div class="video-card">
+                <video class="video-player" controls playsinline preload="metadata">
+                    <source src="fledje.mp4" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </div>
+
+            <div class="video-card">
+                <video class="video-player" controls playsinline preload="metadata">
+                    <source src="fledje2.mp4" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </div>
+        </div>
+
+        <div class="petition-container">
+            <p class="petition-count" id="petitionCounter">
+                <span class="petition-number" id="petitionNumber">47</span>
+                <span class="petition-label">people signed for his new haircut</span>
+            </p>
+            <button class="petition-btn" id="petitionBtn" onclick="signPetition()">
+                <i class="fa-solid fa-scissors"></i> Sign Petition: Fledje New Haircut GOAL 100
+            </button>
+        </div>
+
+        <!-- Links with Always Visible Play Shooter Button at the Bottom -->
+        <div class="links">
+            <a href="game.html" style="background: linear-gradient(135deg, #ff416c, #ff4b2b); font-size: 16px; border: 1px solid #ff758c; box-shadow: 0 0 15px rgba(255, 75, 43, 0.4);">
+                <i class="fa-solid fa-gamepad"></i> 🎮 PLAY FLEDJE SHOOTER (Leaderboard)
+            </a>
+            <a href="https://discord.gg/qFztNJx7ed" target="_blank" rel="noopener">
+                <i class="fa-brands fa-discord"></i> JOIN Discord
+            </a>
+            <a href="https://www.tiktok.com/@twitch.fledje" target="_blank" rel="noopener">
+                <i class="fa-brands fa-tiktok"></i> TikTok
+            </a>
+            <a href="https://www.twitch.tv/fledje" target="_blank" rel="noopener">
+                <i class="fa-brands fa-twitch"></i> Twitch
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // Modal popup controller
+        function closeGamePrompt() {
+            document.getElementById('gamePromptModal').classList.add('hidden');
+        }
+
+        let signed = false;
+        function signPetition() {
+            const btn = document.getElementById('petitionBtn');
+            const counter = document.getElementById('petitionNumber');
+
+            if (!signed) {
+                counter.textContent = '48';
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Petition Signed!';
+                btn.classList.add('signed');
+                signed = true;
+            } else {
+                alert("You have already signed the petition!");
+            }
+        }
+
+        // Pause other video when one plays
+        document.querySelectorAll('.video-player').forEach(video => {
+            video.addEventListener('play', () => {
+                document.querySelectorAll('.video-player').forEach(otherVideo => {
+                    if (otherVideo !== video) {
+                        otherVideo.pause();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
