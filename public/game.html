@@ -525,6 +525,7 @@
 
         const shootSound = new Audio('shootsound.mp3');
         const explosionSound = new Audio('bithuh-vine-boom-392646.mp3');
+        const tomPearlSound = new Audio('hi-my-name-is-tom-pearl.mp3');
 
         function playShootSound() {
             try {
@@ -542,6 +543,16 @@
                     explosionSound.currentTime = 0;
                     explosionSound.volume = 0.4;
                     explosionSound.play().catch(() => {});
+                }
+            } catch(e) {}
+        }
+
+        function playTomPearlSound() {
+            try {
+                if (tomPearlSound) {
+                    tomPearlSound.currentTime = 0;
+                    tomPearlSound.volume = 0.8;
+                    tomPearlSound.play().catch(() => {});
                 }
             } catch(e) {}
         }
@@ -567,17 +578,18 @@
         let enemies = [];
         let particles = [];
 
-        // Final Boss: 100,000 HP, Huge Hitbox!
+        // Final Boss: 100,000 HP, Huge Hitbox positioned high up
         const BOSS_MAX_HP = 100000;
+        let lastTomPearlTime = 0;
         let boss = {
             active: false,
             x: 310,
-            y: 40,
+            y: 15,          // Positioned higher up so there's plenty of space
             width: 280,     // Extra large easy target!
-            height: 220,
+            height: 180,
             health: BOSS_MAX_HP,
             maxHealth: BOSS_MAX_HP,
-            speedX: 1.2,    // Very slow easy movement
+            speedX: 0.8,    // Extremely slow and chill
             direction: 1
         };
 
@@ -727,15 +739,15 @@
                 if (b.y < -50) bullets.splice(i, 1);
             }
 
-            // Spawn Big Slow Toilets (85x85 px, slow falling speed)
+            // Spawn Big Slow Toilets (90x90 px, very slow falling speed)
             const now = Date.now();
-            if (!boss.active && now - lastSpawnTime > 1800) {
+            if (!boss.active && now - lastSpawnTime > 2400) {
                 enemies.push({
-                    x: Math.random() * (canvas.width - 90),
-                    y: -80,
-                    width: 85,  // Extra big toilet!
-                    height: 85,
-                    speedY: 1.0 + Math.random() * 0.6 // Very slow, super easy to dodge!
+                    x: Math.random() * (canvas.width - 100),
+                    y: -90,
+                    width: 90,  // Very big toilet!
+                    height: 90,
+                    speedY: 0.5 + Math.random() * 0.4 // MOLTO PIÙ LENTO!
                 });
                 lastSpawnTime = now;
             }
@@ -745,25 +757,34 @@
                 bossSpawned = true;
                 boss.active = true;
                 boss.x = canvas.width / 2 - boss.width / 2;
-                boss.y = 30;
+                boss.y = 15;
                 enemies = [];
+                playTomPearlSound();
+                lastTomPearlTime = now;
             }
 
-            // Boss Movement
+            // Boss Movement & occasional toilet drop
             if (boss.active) {
                 boss.x += boss.speedX * boss.direction;
                 if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) {
                     boss.direction *= -1;
                 }
 
-                if (Math.random() < 0.012) {
+                // Spawns a slow toilet every few seconds
+                if (Math.random() < 0.006) {
                     enemies.push({
                         x: boss.x + boss.width / 2 - 40,
-                        y: boss.y + boss.height,
-                        width: 80,
-                        height: 80,
-                        speedY: 1.2
+                        y: boss.y + boss.height + 5,
+                        width: 85,
+                        height: 85,
+                        speedY: 0.7 // Very slow and easy to dodge
                     });
+                }
+
+                // Repeat "Hi my name is Tom Pearl" audio every 9-10 seconds
+                if (now - lastTomPearlTime > 9500) {
+                    playTomPearlSound();
+                    lastTomPearlTime = now;
                 }
             }
 

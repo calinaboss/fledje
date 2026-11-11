@@ -1,5 +1,5 @@
 // src/index.js
-// Cloudflare Worker: Static Assets + Authentication + D1 Leaderboard APIs (OWASP Compliant)
+// Cloudflare Worker: Static Assets + Authentication + D1 Leaderboard + D1 Petition (OWASP Compliant)
 
 const DEFAULT_SECRET = "fledje_game_public_repo_default_secret_salt_2026";
 
@@ -26,6 +26,13 @@ function jsonResponse(data, status = 200) {
 function hexString(buffer) {
   const byteArray = new Uint8Array(buffer);
   return Array.from(byteArray).map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+// OWASP: SHA-256 for anonymizing voter IP / client fingerprint
+async function hashFingerprint(str) {
+  const enc = new TextEncoder();
+  const digest = await crypto.subtle.digest('SHA-256', enc.encode(str + "_salt_petition_2026"));
+  return hexString(digest);
 }
 
 // OWASP: PBKDF2 Password Hashing (100k rounds)
@@ -108,10 +115,58 @@ export default {
     }
 
     // ----------------------------------------------------
+    // API: /api/petition (Get count & Sign securely)
+    // ----------------------------------------------------
+    if (pathname === '/api/petition') {
+      if (!db) return jsonResponse({ error: "Database not connected" }, 500);
+
+      // GET current count
+      if (request.method === 'GET') {
+        try {
+          const row = await db.prepare("SELECT count FROM petition WHERE id = 'fledje_haircut'").first();
+          const count = row ? row.count : 47;
+          return jsonResponse({ count });
+        } catch (e) {
+          return jsonResponse({ count: 47 });
+        }
+      }
+
+      // POST sign petition (max security: 1 vote per IP / Voter Hash)
+      if (request.method === 'POST') {
+        const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'anon';
+        const userAgent = request.headers.get('user-agent') || '';
+        const voterHash = await hashFingerprint(`${clientIp}_${userAgent}`);
+
+        try {
+          // Check if already voted
+          const existingVote = await db.prepare("SELECT voter_hash FROM petition_votes WHERE voter_hash = ?")
+            .bind(voterHash).first();
+
+          if (existingVote) {
+            const current = await db.prepare("SELECT count FROM petition WHERE id = 'fledje_haircut'").first();
+            return jsonResponse({ error: "You have already signed this petition!", count: current ? current.count : 47 }, 409);
+          }
+
+          // Insert vote & increment count atomically
+          await db.prepare("INSERT INTO petition_votes (voter_hash, created_at) VALUES (?, ?)")
+            .bind(voterHash, Date.now()).run();
+
+          await db.prepare("UPDATE petition SET count = count + 1 WHERE id = 'fledje_haircut'").run();
+
+          const updated = await db.prepare("SELECT count FROM petition WHERE id = 'fledje_haircut'").first();
+          return jsonResponse({ success: true, count: updated ? updated.count : 48 });
+        } catch (err) {
+          console.error("Petition error:", err);
+          return jsonResponse({ error: "Failed to register vote" }, 500);
+        }
+      }
+    }
+
+    // ----------------------------------------------------
     // API: /api/auth (Register & Login)
     // ----------------------------------------------------
     if (pathname === '/api/auth' && request.method === 'POST') {
-      if (!db) return jsonResponse({ error: "Database not connected. Bind D1 to 'DB'." }, 500);
+      if (!db) return jsonResponse({ error: "Database not connected" }, 500);
 
       let body;
       try {
@@ -125,7 +180,7 @@ export default {
 
       const cleanUsername = username.trim();
       if (!/^[a-zA-Z0-9_\-]{3,20}$/.test(cleanUsername)) {
-        return jsonResponse({ error: "Username must be 3-20 characters (letters, numbers, _ or -)" }, 400);
+        return jsonResponse({ error: "Username must be 3-20 characters" }, 400);
       }
 
       if (!password || typeof password !== 'string' || password.length < 4 || password.length > 64) {
@@ -202,7 +257,7 @@ export default {
 
         const token = auth.substring(7);
         const session = await verifyToken(token, JWT_SECRET);
-        if (!session) return jsonResponse({ error: "Invalid or expired session" }, 401);
+        if (!session) return jsonResponse({ error: "Invalid session" }, 401);
 
         let body;
         try { body = await request.json(); } catch (e) { return jsonResponse({ error: "Invalid JSON" }, 400); }
@@ -227,7 +282,7 @@ export default {
     }
 
     // ----------------------------------------------------
-    // Serve Static Assets (index.html, game.html, images, sounds)
+    // Static Assets
     // ----------------------------------------------------
     if (env.ASSETS) {
       return env.ASSETS.fetch(request);

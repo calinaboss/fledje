@@ -348,20 +348,41 @@
             document.getElementById('gamePromptModal').classList.add('hidden');
         }
 
-        let signed = false;
-        function signPetition() {
+        // Fetch live petition count from Cloudflare D1
+        async function fetchPetitionCount() {
+            try {
+                const res = await fetch('/api/petition');
+                const data = await res.json();
+                if (data && data.count) {
+                    document.getElementById('petitionNumber').textContent = data.count;
+                }
+            } catch(e) {}
+        }
+
+        async function signPetition() {
             const btn = document.getElementById('petitionBtn');
             const counter = document.getElementById('petitionNumber');
 
-            if (!signed) {
-                counter.textContent = '48';
+            try {
+                const res = await fetch('/api/petition', { method: 'POST' });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.error || "You have already signed this petition!");
+                    if (data.count) counter.textContent = data.count;
+                    return;
+                }
+
+                counter.textContent = data.count;
                 btn.innerHTML = '<i class="fa-solid fa-check"></i> Petition Signed!';
-                btn.classList.add('signed');
-                signed = true;
-            } else {
-                alert("You have already signed the petition!");
+                btn.style.background = '#4ade80';
+                btn.style.color = '#000000';
+            } catch(e) {
+                alert("Network error, please try again.");
             }
         }
+
+        fetchPetitionCount();
 
         // Pause other video when one plays
         document.querySelectorAll('.video-player').forEach(video => {
